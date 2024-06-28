@@ -27,12 +27,12 @@ public class AccountRepositoryTest {
 	@BeforeEach
 	void setUp() {
 		repository.delete(99999999);
-		repository.addWithId(new Account(99999999, "Andrzej", Gender.MALE, 0, null));
+		repository.addWithId(new Account(99999999, "Andrzej", "$2a$16$QN5/YFyGIR4mfZU28zobo.wLEdLEEiq7kUUEYEhf/BqJnF9FyfBJC", Gender.MALE, 0, null));
 	}
 
 	@AfterEach
 	void tearDown() {
-
+		repository.delete(99999999);
 	}
 
 	@Test
@@ -78,7 +78,8 @@ public class AccountRepositoryTest {
 		Account account = new Account();
 		account.setAge(5);
 		account.setGender(Gender.FEMALE);
-		account.setUsername("anna");
+		account.setUsername("anna" + Math.random());
+		account.setPassword("$2a$16$QN5/YFyGIR4mfZU28zobo.wLEdLEEiq7kUUEYEhf/BqJnF9FyfBJC");
 		// When
 		// Then
 		assertDoesNotThrow(() -> repository.add(account));
@@ -127,7 +128,7 @@ public class AccountRepositoryTest {
 	@Test
 	void isUsernameNotAvailableOk() {
 		// Given
-		String username = "anna";
+		String username = "Andrzej";
 		// When
 		boolean isAvailable = repository.isUsernameAvailable(username);
 		// Then

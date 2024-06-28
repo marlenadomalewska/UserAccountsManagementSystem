@@ -22,18 +22,18 @@ public class AccountRepository {
 	}
 
 	public Collection<Account> getAll() {
-		String sql = "SELECT id_acc, username, gender, age, creation_timestamp FROM account ORDER BY username ASC;";
-		RowMapper<Account> lambdaMapper = (rs, rowNum) -> new Account(rs.getInt("id_acc"), rs.getString("username"),
+		String sql = "SELECT id_acc, username, password, gender, age, creation_timestamp FROM account ORDER BY username ASC;";
+		RowMapper<Account> lambdaMapper = (rs, rowNum) -> new Account(rs.getInt("id_acc"), rs.getString("username"), rs.getString("password"),
 			parseGender(rs.getString("gender")), rs.getInt("age"), rs.getTimestamp("creation_timestamp").toLocalDateTime());
 		return jdbcTemplate.query(sql, lambdaMapper);
 	}
 
 	public Optional<Account> getById(int idAcc) {
-		String sql = "SELECT id_acc, username, gender, age, creation_timestamp FROM account WHERE id_acc=?;";
+		String sql = "SELECT id_acc, username, password, gender, age, creation_timestamp FROM account WHERE id_acc=?;";
 		ResultSetExtractor<Optional<Account>> rsExtractor = rs -> {
 			Account account = null;
 			if (rs.next()) {
-				account = new Account(rs.getInt("id_acc"), rs.getString("username"),
+				account = new Account(rs.getInt("id_acc"), rs.getString("username"), rs.getString("password"),
 					parseGender(rs.getString("gender")), rs.getInt("age"), rs.getTimestamp("creation_timestamp").toLocalDateTime());
 			}
 			return Optional.ofNullable(account);
@@ -48,15 +48,16 @@ public class AccountRepository {
 
 	public void add(Account account) {
 		jdbcTemplate.update(
-			"INSERT INTO account (username, gender, age, creation_timestamp) VALUES(?,?,?, current_timestamp::timestamp(0))",
-			account.getUsername(), account.getGender().getValue(), account.getAge());
+			"INSERT INTO account (username, password, gender, age, creation_timestamp) VALUES(?,?,?,?, current_timestamp::timestamp(0))",
+			account.getUsername(), account.getPassword(), account.getGender().getValue(), account.getAge());
 	}
 
 	// for test purposes
 	public void addWithId(Account account) {
 		jdbcTemplate.update(
-			"INSERT INTO account (id_acc, username, gender, age, creation_timestamp) VALUES(?,?,?,?, current_timestamp::timestamp(0))", account.getIdAcc(),
-			account.getUsername(), account.getGender().getValue(), account.getAge());
+			"INSERT INTO account (id_acc, username, password, gender, age, creation_timestamp) VALUES(?,?,?,?,?, current_timestamp::timestamp(0))",
+			account.getIdAcc(),
+			account.getUsername(), account.getPassword(), account.getGender().getValue(), account.getAge());
 	}
 
 	public void edit(Account account) {

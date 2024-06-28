@@ -2,6 +2,8 @@ package com.accountmanagement.views;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.accountmanagement.data.entity.Account;
 import com.accountmanagement.data.entity.Gender;
 import com.accountmanagement.data.service.AccountService;
@@ -11,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -27,6 +30,7 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 	private final AccountService service;
 
 	private TextField tfUsername;
+	private PasswordField pfPassword;
 	private IntegerField ifAge;
 	private RadioButtonGroup<Gender> rGender;
 	private Button bSave;
@@ -43,6 +47,9 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 	private void createGUI() {
 		tfUsername = new TextField("Username");
 		tfUsername.setRequired(true);
+		pfPassword = new PasswordField("Password");
+		pfPassword.setRequired(true);
+		pfPassword.setRevealButtonVisible(false);
 		ifAge = new IntegerField("Age");
 		ifAge.setRequired(true);
 		rGender = new RadioButtonGroup<>("Gender");
@@ -52,7 +59,7 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 		bSave = new Button("Save");
 		bExit = new Button("Exit");
 
-		add(tfUsername, ifAge, rGender,
+		add(tfUsername, pfPassword, ifAge, rGender,
 			new HorizontalLayout(bSave, bExit));
 
 		setSizeFull();
@@ -68,7 +75,7 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 	}
 
 	private void doOnSave() {
-		if (tfUsername.isInvalid() || ifAge.isInvalid()) {
+		if (tfUsername.isInvalid() || ifAge.isInvalid() || pfPassword.isInvalid()) {
 			return;
 		}
 		if (account == null) {
@@ -92,6 +99,7 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 		account.setAge(ifAge.getValue());
 		account.setGender(rGender.getValue());
 		account.setUsername(tfUsername.getValue());
+		account.setPassword(new BCryptPasswordEncoder(16).encode(pfPassword.getValue()));
 		return account;
 	}
 
@@ -103,6 +111,7 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 		tfUsername.setValue(account.getUsername());
 		ifAge.setValue(account.getAge());
 		rGender.setValue(account.getGender());
+		pfPassword.setValue(account.getPassword());
 	}
 
 	@Override
@@ -110,6 +119,7 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 		Optional<String> idParameter = event.getRouteParameters().get("id_acc");
 		if (idParameter.isPresent()) {
 			tfUsername.setReadOnly(true);
+			pfPassword.setReadOnly(true);
 			loadAccount(service.getAccountById(Integer.parseInt(idParameter.get())));
 		}
 	}

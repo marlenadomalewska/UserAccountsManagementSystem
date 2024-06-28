@@ -32,12 +32,12 @@ public class AccountServiceTest {
 	@BeforeEach
 	void setUp() {
 		repository.delete(99999999);
-		repository.addWithId(new Account(99999999, "Andrzej", Gender.MALE, 0, null));
+		repository.addWithId(new Account(99999999, "Andrzej", "$2a$16$QN5/YFyGIR4mfZU28zobo.wLEdLEEiq7kUUEYEhf/BqJnF9FyfBJC", Gender.MALE, 0, null));
 	}
 
 	@AfterEach
 	void tearDown() {
-
+		repository.delete(99999999);
 	}
 
 	@Test

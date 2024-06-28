@@ -13,6 +13,7 @@ public class Account {
 
 	private int idAcc;
 	private String username;
+	private String password;
 	private Gender gender;
 	private int age;
 	private LocalDateTime creationTimestamp;

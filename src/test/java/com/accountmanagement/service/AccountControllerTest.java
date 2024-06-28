@@ -103,7 +103,7 @@ public class AccountControllerTest {
 	@Test
 	void addAccountOk() throws Exception {
 		// Given
-		Account account = new Account(0, "AAA", Gender.FEMALE, 9, null);
+		Account account = new Account(0, "AAA", "XYZ", Gender.FEMALE, 9, null);
 		// When
 		String payload = getObjectMapper().writeValueAsString(account);
 		// Then
@@ -115,7 +115,7 @@ public class AccountControllerTest {
 	@Test
 	void editAccountOk() throws Exception {
 		// Given
-		Account account = new Account(1, "AAA", Gender.FEMALE, 9, null);
+		Account account = new Account(1, "AAA", null, Gender.FEMALE, 9, null);
 		// When
 		String payload = getObjectMapper().writeValueAsString(account);
 		// Then
