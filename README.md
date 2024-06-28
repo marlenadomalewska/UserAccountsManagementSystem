@@ -18,7 +18,8 @@ CREATE DATABASE account_management
 CREATE TABLE public.account
 (
     id_acc SERIAL,
-    username character varying(255) NOT NULL,
+    username character varying(255) NOT NULL,	
+    password character varying(255) NOT NULL,
     gender character varying(1) NOT NULL,
     age integer NOT NULL,
     creation_timestamp timestamp with time zone NOT NULL,
