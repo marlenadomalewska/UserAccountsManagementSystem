@@ -9,23 +9,30 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.accountmanagement.data.entity.Account;
+import com.accountmanagement.data.entity.Gender;
+import com.accountmanagement.data.service.AccountRepository;
 import com.accountmanagement.data.service.AccountService;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class AccountServiceTest {
 
 	@Autowired
-	private WebClient webClient;
+	private WebTestClient webClient;
 	@Autowired
 	private AccountService service;
+	@Autowired
+	private AccountRepository repository;
 
 	@BeforeEach
 	void setUp() {
-
+		repository.delete(99999999);
+		repository.addWithId(new Account(99999999, "Andrzej", Gender.MALE, 0, null));
 	}
 
 	@AfterEach
@@ -61,7 +68,7 @@ public class AccountServiceTest {
 	@Test
 	void getAccountByIdOk() {
 		// Given
-		int idAcc = 1;
+		int idAcc = 99999999;
 		// When
 		Account account = service.getAccountById(idAcc);
 		// Then

@@ -52,6 +52,13 @@ public class AccountRepository {
 			account.getUsername(), account.getGender().getValue(), account.getAge());
 	}
 
+	// for test purposes
+	public void addWithId(Account account) {
+		jdbcTemplate.update(
+			"INSERT INTO account (id_acc, username, gender, age, creation_timestamp) VALUES(?,?,?,?, current_timestamp::timestamp(0))", account.getIdAcc(),
+			account.getUsername(), account.getGender().getValue(), account.getAge());
+	}
+
 	public void edit(Account account) {
 		jdbcTemplate.update(
 			"UPDATE account SET "

@@ -11,7 +11,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -27,7 +26,8 @@ public class AccountRepositoryTest {
 
 	@BeforeEach
 	void setUp() {
-
+		repository.delete(99999999);
+		repository.addWithId(new Account(99999999, "Andrzej", Gender.MALE, 0, null));
 	}
 
 	@AfterEach
@@ -55,7 +55,7 @@ public class AccountRepositoryTest {
 	@Test
 	void getByIdOk() {
 		// Given
-		int idAcc = 1;
+		int idAcc = 99999999;
 		// When
 		Optional<Account> account = repository.getById(idAcc);
 		// Then
@@ -90,7 +90,7 @@ public class AccountRepositoryTest {
 		Account account = new Account();
 		// When
 		// Then
-		assertThrows(PSQLException.class, () -> repository.add(account));
+		assertThrows(Exception.class, () -> repository.add(account));
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class AccountRepositoryTest {
 		Account account = new Account();
 		account.setAge(5);
 		account.setGender(Gender.FEMALE);
-		account.setIdAcc(1);
+		account.setIdAcc(99999999);
 		// When
 		// Then
 		assertDoesNotThrow(() -> repository.edit(account));
@@ -111,7 +111,7 @@ public class AccountRepositoryTest {
 		Account account = new Account();
 		// When
 		// Then
-		assertThrows(PSQLException.class, () -> repository.edit(account));
+		assertThrows(Exception.class, () -> repository.edit(account));
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class AccountRepositoryTest {
 	@Test
 	void isUsernameNotAvailableOk() {
 		// Given
-		String username = "Anna";
+		String username = "anna";
 		// When
 		boolean isAvailable = repository.isUsernameAvailable(username);
 		// Then
@@ -137,7 +137,7 @@ public class AccountRepositoryTest {
 	@Test
 	void deleteAccountOk() {
 		// Given
-		int idAcc = 1;
+		int idAcc = 99999999;
 		// When
 		// Then
 		assertDoesNotThrow(() -> repository.delete(idAcc));

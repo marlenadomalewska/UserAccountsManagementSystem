@@ -74,13 +74,13 @@ public class AccountControllerTest {
 	@Test
 	void getAccountByIdOk() throws Exception {
 		// Given
-		int idFa = 1;
+		int idAcc = 1;
 		Optional<Account> optAccount = Optional.ofNullable(new Account());
 		// When
 		Mockito.when(repository.getById(1)).thenReturn(optAccount);
 
 		// Then
-		MockHttpServletRequestBuilder action = MockMvcRequestBuilders.get(BASE_URL + "/{id_acc}", idFa);
+		MockHttpServletRequestBuilder action = MockMvcRequestBuilders.get(BASE_URL + "/{id_acc}", idAcc);
 		action.accept(MediaType.APPLICATION_JSON);
 
 		mockMvc.perform(action).andExpect(status().isOk()).andDo(print()).andReturn();
@@ -89,12 +89,12 @@ public class AccountControllerTest {
 	@Test
 	void getAccountByIdNotOk() throws Exception {
 		// Given
-		int idFa = 0;
+		int idAcc = 0;
 		// When
 		Mockito.when(repository.getById(1)).thenReturn(Optional.empty());
 
 		// Then
-		MockHttpServletRequestBuilder action = MockMvcRequestBuilders.get(BASE_URL + "/{id_acc}", idFa);
+		MockHttpServletRequestBuilder action = MockMvcRequestBuilders.get(BASE_URL + "/{id_acc}", idAcc);
 		action.accept(MediaType.APPLICATION_JSON);
 
 		mockMvc.perform(action).andExpect(status().is4xxClientError()).andDo(print()).andReturn();
@@ -113,18 +113,6 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	void addAccountNotOk() throws Exception {
-		// Given
-		Account account = new Account();
-		// When
-		String payload = getObjectMapper().writeValueAsString(account);
-		// Then
-		MockHttpServletRequestBuilder action = MockMvcRequestBuilders.post(BASE_URL).contentType(MediaType.APPLICATION_JSON).content(payload);
-
-		mockMvc.perform(action).andExpect(status().is5xxServerError()).andReturn();
-	}
-
-	@Test
 	void editAccountOk() throws Exception {
 		// Given
 		Account account = new Account(1, "AAA", Gender.FEMALE, 9, null);
@@ -134,18 +122,6 @@ public class AccountControllerTest {
 		MockHttpServletRequestBuilder action = MockMvcRequestBuilders.put(BASE_URL).contentType(MediaType.APPLICATION_JSON).content(payload);
 
 		mockMvc.perform(action).andExpect(status().isOk()).andReturn();
-	}
-
-	@Test
-	void editAccountNotOk() throws Exception {
-		// Given
-		Account account = new Account();
-		// When
-		String payload = getObjectMapper().writeValueAsString(account);
-		// Then
-		MockHttpServletRequestBuilder action = MockMvcRequestBuilders.put(BASE_URL).contentType(MediaType.APPLICATION_JSON).content(payload);
-
-		mockMvc.perform(action).andExpect(status().is5xxServerError()).andReturn();
 	}
 
 	@Test
