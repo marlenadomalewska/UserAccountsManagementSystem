@@ -31,7 +31,7 @@ ALTER TABLE IF EXISTS public.account
 ```
 
 
-### PostgreSQL - test database
+## PostgreSQL - test database
 ```
 CREATE DATABASE account_management_test
     WITH
