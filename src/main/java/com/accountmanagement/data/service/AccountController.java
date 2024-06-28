@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.accountmanagement.data.entity.Account;
+import com.accountmanagement.data.entity.AccountDTO;
 
 @RestController
 @RequestMapping("/account")
@@ -27,13 +27,13 @@ public class AccountController {
 	}
 
 	@GetMapping("")
-	public ResponseEntity<Collection<Account>> getAllAccounts() {
+	public ResponseEntity<Collection<AccountDTO>> getAllAccounts() {
 		return ResponseEntity.ok(repository.getAll());
 	}
 
 	@GetMapping(path = "/{id_acc}", produces = "application/json")
-	public ResponseEntity<Account> getAccount(@PathVariable("id_acc") int idAcc) {
-		Optional<Account> acc = repository.getById(idAcc);
+	public ResponseEntity<AccountDTO> getAccount(@PathVariable("id_acc") int idAcc) {
+		Optional<AccountDTO> acc = repository.getById(idAcc);
 		if (acc.isPresent()) {
 			return ResponseEntity.ok(acc.get());
 		} else {
@@ -48,13 +48,13 @@ public class AccountController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<Void> addAccount(@RequestBody Account account) {
+	public ResponseEntity<Void> addAccount(@RequestBody AccountDTO account) {
 		repository.add(account);
 		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("")
-	public ResponseEntity<Void> editAccount(@RequestBody Account account) {
+	public ResponseEntity<Void> editAccount(@RequestBody AccountDTO account) {
 		repository.edit(account);
 		return ResponseEntity.ok().build();
 	}

@@ -2,7 +2,7 @@ package com.accountmanagement.views;
 
 import java.time.format.DateTimeFormatter;
 
-import com.accountmanagement.data.entity.Account;
+import com.accountmanagement.data.entity.AccountDTO;
 import com.accountmanagement.data.service.AccountService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -20,7 +20,7 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 public class AccountGridView extends VerticalLayout {
 
 	private final AccountService service;
-	private Grid<Account> grid;
+	private Grid<AccountDTO> grid;
 	private Button bAdd;
 
 	public AccountGridView(AccountService service) {
@@ -31,10 +31,10 @@ public class AccountGridView extends VerticalLayout {
 			bAdd.getUI().ifPresent(ui -> ui.navigate(AccountDetailsView.class));
 		});
 
-		grid = new Grid<>(Account.class, false);
-		grid.addColumn(Account::getUsername).setHeader("Username").setWidth("500px");
+		grid = new Grid<>(AccountDTO.class, false);
+		grid.addColumn(AccountDTO::getUsername).setHeader("Username").setWidth("500px");
 		grid.addColumn(source -> source.getGender().getDescription()).setHeader("Gender").setWidth("200px");
-		grid.addColumn(Account::getAge).setHeader("Age").setWidth("100px");
+		grid.addColumn(AccountDTO::getAge).setHeader("Age").setWidth("100px");
 		grid.addColumn(source -> source.getCreationTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).setHeader("Created")
 			.setWidth("100px");
 		grid.addComponentColumn(source -> new HorizontalLayout(
@@ -44,13 +44,13 @@ public class AccountGridView extends VerticalLayout {
 		loadAll();
 	}
 
-	private Button initButtonEdit(Account source) {
+	private Button initButtonEdit(AccountDTO source) {
 		return new Button("Edit", event -> {
 			getUI().ifPresent(ui -> ui.navigate(AccountDetailsView.class, new RouteParameters("id_acc", String.valueOf(source.getIdAcc()))));
 		});
 	}
 
-	private Button initButtonDelete(Account source) {
+	private Button initButtonDelete(AccountDTO source) {
 		return new Button("Delete", event -> {
 			service.deleteAccount(source.getIdAcc());
 			Notification.show("Account deleted");

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.accountmanagement.data.entity.Account;
+import com.accountmanagement.data.entity.AccountDTO;
 import com.accountmanagement.data.entity.Gender;
 import com.accountmanagement.data.service.AccountService;
 import com.vaadin.flow.component.button.Button;
@@ -35,7 +35,7 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 	private RadioButtonGroup<Gender> rGender;
 	private Button bSave;
 	private Button bExit;
-	private Account account;
+	private AccountDTO account;
 
 	public AccountDetailsView(AccountService service) {
 		super();
@@ -92,9 +92,9 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 		getUI().ifPresent(ui -> ui.navigate(AccountGridView.class));
 	}
 
-	private Account buildAccount() {
+	private AccountDTO buildAccount() {
 		if (account == null) {
-			account = new Account();
+			account = new AccountDTO();
 		}
 		account.setAge(ifAge.getValue());
 		account.setGender(rGender.getValue());
@@ -103,7 +103,7 @@ public class AccountDetailsView extends VerticalLayout implements BeforeEnterObs
 		return account;
 	}
 
-	private void loadAccount(Account account) {
+	private void loadAccount(AccountDTO account) {
 		this.account = account;
 		if (account == null) {
 			return;

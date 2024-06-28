@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.accountmanagement.data.entity.Account;
+import com.accountmanagement.data.entity.AccountDTO;
 import com.accountmanagement.data.entity.Gender;
 import com.accountmanagement.data.service.AccountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,7 +60,7 @@ public class AccountControllerTest {
 	@Test
 	void getAllAccountsOk() throws Exception {
 		// Given
-		Collection<Account> accounts = List.of(new Account(), new Account());
+		Collection<AccountDTO> accounts = List.of(new AccountDTO(), new AccountDTO());
 		// When
 		Mockito.when(repository.getAll()).thenReturn(accounts);
 
@@ -75,7 +75,7 @@ public class AccountControllerTest {
 	void getAccountByIdOk() throws Exception {
 		// Given
 		int idAcc = 1;
-		Optional<Account> optAccount = Optional.ofNullable(new Account());
+		Optional<AccountDTO> optAccount = Optional.ofNullable(new AccountDTO());
 		// When
 		Mockito.when(repository.getById(1)).thenReturn(optAccount);
 
@@ -103,7 +103,7 @@ public class AccountControllerTest {
 	@Test
 	void addAccountOk() throws Exception {
 		// Given
-		Account account = new Account(0, "AAA", "XYZ", Gender.FEMALE, 9, null);
+		AccountDTO account = new AccountDTO(0, "AAA", "XYZ", Gender.FEMALE, 9, null);
 		// When
 		String payload = getObjectMapper().writeValueAsString(account);
 		// Then
@@ -115,7 +115,7 @@ public class AccountControllerTest {
 	@Test
 	void editAccountOk() throws Exception {
 		// Given
-		Account account = new Account(1, "AAA", null, Gender.FEMALE, 9, null);
+		AccountDTO account = new AccountDTO(1, "AAA", null, Gender.FEMALE, 9, null);
 		// When
 		String payload = getObjectMapper().writeValueAsString(account);
 		// Then

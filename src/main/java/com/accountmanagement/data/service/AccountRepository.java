@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.accountmanagement.data.entity.Account;
+import com.accountmanagement.data.entity.AccountDTO;
 import com.accountmanagement.data.entity.Gender;
 
 @Repository
@@ -21,19 +21,19 @@ public class AccountRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public Collection<Account> getAll() {
+	public Collection<AccountDTO> getAll() {
 		String sql = "SELECT id_acc, username, password, gender, age, creation_timestamp FROM account ORDER BY username ASC;";
-		RowMapper<Account> lambdaMapper = (rs, rowNum) -> new Account(rs.getInt("id_acc"), rs.getString("username"), rs.getString("password"),
+		RowMapper<AccountDTO> lambdaMapper = (rs, rowNum) -> new AccountDTO(rs.getInt("id_acc"), rs.getString("username"), rs.getString("password"),
 			parseGender(rs.getString("gender")), rs.getInt("age"), rs.getTimestamp("creation_timestamp").toLocalDateTime());
 		return jdbcTemplate.query(sql, lambdaMapper);
 	}
 
-	public Optional<Account> getById(int idAcc) {
+	public Optional<AccountDTO> getById(int idAcc) {
 		String sql = "SELECT id_acc, username, password, gender, age, creation_timestamp FROM account WHERE id_acc=?;";
-		ResultSetExtractor<Optional<Account>> rsExtractor = rs -> {
-			Account account = null;
+		ResultSetExtractor<Optional<AccountDTO>> rsExtractor = rs -> {
+			AccountDTO account = null;
 			if (rs.next()) {
-				account = new Account(rs.getInt("id_acc"), rs.getString("username"), rs.getString("password"),
+				account = new AccountDTO(rs.getInt("id_acc"), rs.getString("username"), rs.getString("password"),
 					parseGender(rs.getString("gender")), rs.getInt("age"), rs.getTimestamp("creation_timestamp").toLocalDateTime());
 			}
 			return Optional.ofNullable(account);
@@ -46,21 +46,21 @@ public class AccountRepository {
 		jdbcTemplate.update("DELETE FROM account WHERE id_acc=?;", idAcc);
 	}
 
-	public void add(Account account) {
+	public void add(AccountDTO account) {
 		jdbcTemplate.update(
 			"INSERT INTO account (username, password, gender, age, creation_timestamp) VALUES(?,?,?,?, current_timestamp::timestamp(0))",
 			account.getUsername(), account.getPassword(), account.getGender().getValue(), account.getAge());
 	}
 
 	// for test purposes
-	public void addWithId(Account account) {
+	public void addWithId(AccountDTO account) {
 		jdbcTemplate.update(
 			"INSERT INTO account (id_acc, username, password, gender, age, creation_timestamp) VALUES(?,?,?,?,?, current_timestamp::timestamp(0))",
 			account.getIdAcc(),
 			account.getUsername(), account.getPassword(), account.getGender().getValue(), account.getAge());
 	}
 
-	public void edit(Account account) {
+	public void edit(AccountDTO account) {
 		jdbcTemplate.update(
 			"UPDATE account SET "
 				+ "gender=?, "

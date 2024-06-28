@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.accountmanagement.data.entity.Account;
+import com.accountmanagement.data.entity.AccountDTO;
 import com.accountmanagement.data.entity.Gender;
 import com.accountmanagement.data.service.AccountRepository;
 
@@ -27,7 +27,7 @@ public class AccountRepositoryTest {
 	@BeforeEach
 	void setUp() {
 		repository.delete(99999999);
-		repository.addWithId(new Account(99999999, "Andrzej", "$2a$16$QN5/YFyGIR4mfZU28zobo.wLEdLEEiq7kUUEYEhf/BqJnF9FyfBJC", Gender.MALE, 0, null));
+		repository.addWithId(new AccountDTO(99999999, "Andrzej", "$2a$16$QN5/YFyGIR4mfZU28zobo.wLEdLEEiq7kUUEYEhf/BqJnF9FyfBJC", Gender.MALE, 0, null));
 	}
 
 	@AfterEach
@@ -47,7 +47,7 @@ public class AccountRepositoryTest {
 	void getAllOk() {
 		// Given
 		// When
-		Collection<Account> accounts = repository.getAll();
+		Collection<AccountDTO> accounts = repository.getAll();
 		// Then
 		Assertions.assertThat(accounts).isNotEmpty();
 	}
@@ -57,7 +57,7 @@ public class AccountRepositoryTest {
 		// Given
 		int idAcc = 99999999;
 		// When
-		Optional<Account> account = repository.getById(idAcc);
+		Optional<AccountDTO> account = repository.getById(idAcc);
 		// Then
 		Assertions.assertThat(account).isNotEmpty();
 	}
@@ -67,7 +67,7 @@ public class AccountRepositoryTest {
 		// Given
 		int idAcc = 0;
 		// When
-		Optional<Account> account = repository.getById(idAcc);
+		Optional<AccountDTO> account = repository.getById(idAcc);
 		// Then
 		Assertions.assertThat(account).isEmpty();
 	}
@@ -75,7 +75,7 @@ public class AccountRepositoryTest {
 	@Test
 	void addAccountOk() {
 		// Given
-		Account account = new Account();
+		AccountDTO account = new AccountDTO();
 		account.setAge(5);
 		account.setGender(Gender.FEMALE);
 		account.setUsername("anna" + Math.random());
@@ -88,7 +88,7 @@ public class AccountRepositoryTest {
 	@Test
 	void addAccountNotOk() {
 		// Given
-		Account account = new Account();
+		AccountDTO account = new AccountDTO();
 		// When
 		// Then
 		assertThrows(Exception.class, () -> repository.add(account));
@@ -97,7 +97,7 @@ public class AccountRepositoryTest {
 	@Test
 	void editAccountOk() {
 		// Given
-		Account account = new Account();
+		AccountDTO account = new AccountDTO();
 		account.setAge(5);
 		account.setGender(Gender.FEMALE);
 		account.setIdAcc(99999999);
@@ -109,7 +109,7 @@ public class AccountRepositoryTest {
 	@Test
 	void editAccountNotOk() {
 		// Given
-		Account account = new Account();
+		AccountDTO account = new AccountDTO();
 		// When
 		// Then
 		assertThrows(Exception.class, () -> repository.edit(account));

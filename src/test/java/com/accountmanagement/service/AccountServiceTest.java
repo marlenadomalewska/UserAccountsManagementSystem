@@ -13,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.accountmanagement.data.entity.Account;
+import com.accountmanagement.data.entity.AccountDTO;
 import com.accountmanagement.data.entity.Gender;
 import com.accountmanagement.data.service.AccountRepository;
 import com.accountmanagement.data.service.AccountService;
@@ -32,7 +32,7 @@ public class AccountServiceTest {
 	@BeforeEach
 	void setUp() {
 		repository.delete(99999999);
-		repository.addWithId(new Account(99999999, "Andrzej", "$2a$16$QN5/YFyGIR4mfZU28zobo.wLEdLEEiq7kUUEYEhf/BqJnF9FyfBJC", Gender.MALE, 0, null));
+		repository.addWithId(new AccountDTO(99999999, "Andrzej", "$2a$16$QN5/YFyGIR4mfZU28zobo.wLEdLEEiq7kUUEYEhf/BqJnF9FyfBJC", Gender.MALE, 0, null));
 	}
 
 	@AfterEach
@@ -60,7 +60,7 @@ public class AccountServiceTest {
 	void getAllAccountsOk() {
 		// Given
 		// When
-		Collection<Account> accounts = service.getAllAccounts();
+		Collection<AccountDTO> accounts = service.getAllAccounts();
 		// Then
 		Assertions.assertThat(accounts).isNotEmpty();
 	}
@@ -70,7 +70,7 @@ public class AccountServiceTest {
 		// Given
 		int idAcc = 99999999;
 		// When
-		Account account = service.getAccountById(idAcc);
+		AccountDTO account = service.getAccountById(idAcc);
 		// Then
 		Assertions.assertThat(account).isNotNull();
 	}
